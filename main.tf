@@ -11,7 +11,7 @@ resource "azurerm_virtual_network" "myterraformnetwork" {
   name                = "myVnet"
   address_space       = ["10.0.0.0/16"]
   location            = var.location
-  resource_group_name = azurerm_resource_group.myterraformgroup.name
+  resource_group_name = var.resource-group
 
   tags = {
     environment = "Terraform Demo"
@@ -20,7 +20,7 @@ resource "azurerm_virtual_network" "myterraformnetwork" {
 
 resource "azurerm_subnet" "myterraformsubnet" {
   name                 = "mySubnet"
-  resource_group_name  = azurerm_resource_group.myterraformgroup.name
+  resource_group_name  = var.resource-group
   virtual_network_name = azurerm_virtual_network.myterraformnetwork.name
   address_prefix = "10.0.0.0/24"
 }
@@ -28,7 +28,7 @@ resource "azurerm_subnet" "myterraformsubnet" {
 resource "azurerm_public_ip" "myterraformpublicip" {
   name                = "myPublicIP"
   location            = var.location
-  resource_group_name = azurerm_resource_group.myterraformgroup.name
+  resource_group_name = var.resource-group
   allocation_method   = "Dynamic"
 
   tags = {
@@ -39,7 +39,7 @@ resource "azurerm_public_ip" "myterraformpublicip" {
 resource "azurerm_network_security_group" "myterraformnsg" {
   name                = "myNetworkSecurityGroup"
   location            = var.location
-  resource_group_name = azurerm_resource_group.myterraformgroup.name
+  resource_group_name = var.resource-group
 
   security_rule {
     name                       = "SSH"
@@ -60,7 +60,7 @@ resource "azurerm_network_security_group" "myterraformnsg" {
 resource "azurerm_network_interface" "myterraformnic" {
   name                = "myNIC"
   location            = var.location
-  resource_group_name = azurerm_resource_group.myterraformgroup.name
+  resource_group_name = var.resource-group
 
   ip_configuration {
     name                          = "myNicConfiguration"
@@ -82,7 +82,7 @@ resource "azurerm_network_interface_security_group_association" "example" {
 
 resource "random_id" "randomId" {
   keepers = {
-    resource_group = azurerm_resource_group.myterraformgroup.name
+    resource_group = var.resource-group
   }
   byte_length = 8
 }
@@ -90,7 +90,7 @@ resource "random_id" "randomId" {
 resource "azurerm_linux_virtual_machine" "myterraformvm" {
   name                  = "myVM"
   location              = var.location
-  resource_group_name   = azurerm_resource_group.myterraformgroup.name
+  resource_group_name   = var.resource-group
   network_interface_ids = [azurerm_network_interface.myterraformnic.id]
   size                  = "Standard_DS1_v2"
 
